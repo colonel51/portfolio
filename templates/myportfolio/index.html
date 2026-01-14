@@ -1,0 +1,823 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ramazan Karsanba - Python & Django Full Stack Developer. Ölçeklenebilir, güvenli ve yüksek performanslı web sistemleri mimarlığı yapıyorum.">
+    <title>Ramazan Karsanba | Senior Python Developer</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Critical CSS Inline (prevents FOUC) -->
+    <style>
+        /* Font fallback to prevent FOIT/FOUT */
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 300 700;
+            font-display: swap;
+            src: local('Arial'), local('Helvetica'), local('sans-serif');
+        }
+        
+        body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#fff;background:#000;margin:0;padding:0;line-height:1.6;overflow-x:hidden}
+        .navbar{background:rgba(33,37,41,.95)!important;backdrop-filter:blur(10px);position:fixed;top:0;width:100%;z-index:1000;padding:1rem 0;transition:transform .3s ease-in-out}
+        .hero-section{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+        section{background:#000;padding:80px 0}
+        section.bg-light{background:#0a0a0a!important}
+        .loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s ease-out,visibility .8s ease-out}
+        .loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .matrix-container{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
+        #matrixCanvas{width:100%;height:100%;display:block}
+        .loading-content{position:relative;z-index:10;text-align:center;color:#00ff41;font-family:'Courier New',monospace}
+        .loading-text{font-size:3rem;font-weight:bold;margin-bottom:2rem;text-shadow:0 0 10px #00ff41,0 0 20px #00ff41,0 0 30px #00ff41;letter-spacing:.5rem}
+        .loading-letter{display:inline-block;animation:letterGlow 1.5s ease-in-out infinite}
+        .loading-progress{width:300px;height:4px;background:rgba(0,255,65,.2);border-radius:2px;overflow:hidden;margin:0 auto;box-shadow:0 0 10px rgba(0,255,65,.5)}
+        .progress-bar{height:100%;background:linear-gradient(90deg,#00ff41,#00cc33);width:0%;animation:progressLoad 2s ease-in-out forwards;box-shadow:0 0 10px #00ff41,0 0 20px #00ff41}
+        .loading-letter:nth-child(1){animation-delay:0s}
+        .loading-letter:nth-child(2){animation-delay:.1s}
+        .loading-letter:nth-child(3){animation-delay:.2s}
+        .loading-letter:nth-child(4){animation-delay:.3s}
+        .loading-letter:nth-child(5){animation-delay:.4s}
+        .loading-letter:nth-child(6){animation-delay:.5s}
+        .loading-letter:nth-child(7){animation-delay:.6s}
+        @keyframes letterGlow{0%,100%{opacity:1;transform:translateY(0);text-shadow:0 0 10px #00ff41,0 0 20px #00ff41,0 0 30px #00ff41}50%{opacity:.5;transform:translateY(-10px);text-shadow:0 0 5px #00ff41,0 0 10px #00ff41,0 0 15px #00ff41}}
+        @keyframes progressLoad{0%{width:0%}100%{width:100%}}
+        .container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}
+        .row{display:flex;flex-wrap:wrap;margin:0 -15px}
+        [class*="col-"]{padding:0 15px}
+        h1,h2,h3,h4,h5,h6{color:#fff;font-weight:600;margin:0;font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+        p{color:#ccc;margin:0;font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+        a{text-decoration:none;color:inherit}
+        img{max-width:100%;height:auto}
+    </style>
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Ramazan Karsanba | Senior Python Developer">
+    <meta property="og:description" content="Ölçeklenebilir backend mimarileri ve yapay zeka çözümleri. Python & Django Full Stack Developer.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ramazankarsanba.com">
+    <meta property="og:image" content="{% static 'images/ramazan.jpg' %}">
+    <meta property="og:site_name" content="Ramazan Karsanba Portfolio">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ramazan Karsanba | Senior Python Developer">
+    <meta name="twitter:description" content="Ölçeklenebilir backend mimarileri ve yapay zeka çözümleri.">
+    <meta name="twitter:image" content="{% static 'images/ramazan.jpg' %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Google Fonts - Preload for faster loading -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="matrix-container">
+            <canvas id="matrixCanvas"></canvas>
+        </div>
+        <div class="loading-content">
+            <div class="loading-text">
+                <span class="loading-letter">L</span>
+                <span class="loading-letter">O</span>
+                <span class="loading-letter">A</span>
+                <span class="loading-letter">D</span>
+                <span class="loading-letter">I</span>
+                <span class="loading-letter">N</span>
+                <span class="loading-letter">G</span>
+                <span class="loading-dots">
+                    <span class="dot">.</span>
+                    <span class="dot">.</span>
+                    <span class="dot">.</span>
+                </span>
+            </div>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav" aria-label="Ana navigasyon">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#home" aria-label="Ana sayfaya dön">Ramazan Karsanba</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Hakkımda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Hizmetler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portfolio">Projeler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">İletişim</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section d-flex align-items-center min-vh-100">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="display-3 fw-bold mb-4 animate-fade-in">
+                            Merhaba, Ben <span class="text-primary">Ramazan Karsanba</span>
+                        </h1>
+                        <p class="lead mb-4 animate-fade-in-delay">
+                            <span class="typewriter-text"></span><span class="cursor">|</span>
+                        </p>
+                        <p class="mb-4 animate-fade-in-delay-2">
+                            Ölçeklenebilir, güvenli ve yüksek performanslı web sistemleri mimarlığı yapıyorum. 
+                            Python gücüyle modern çözümler üretiyorum.
+                        </p>
+                        <div class="hero-buttons animate-fade-in-delay-3">
+                            
+                            <a href="#portfolio" class="btn btn-primary btn-lg me-3" aria-label="Projelerim bölümüne git">Projelerim</a>
+                            <a href="#contact" class="btn btn-outline-light btn-lg me-3" aria-label="İletişim bölümüne git">İletişim</a>
+                            <a href="{% static 'files/Ramazan_Karsanba_CV.pdf' %}" target="_blank" class="btn btn-primary btn-lg me-3" download aria-label="CV dosyasını indir">
+                                <i class="bi bi-download" aria-hidden="true"></i> CV İndir
+                            </a>
+                        </div>
+                        <div class="social-links mt-4">
+                            <a href="https://github.com/colonel51" target="_blank" class="social-icon me-3" aria-label="GitHub profilimi ziyaret et"><i class="bi bi-github"></i></a>
+                            <a href="https://www.linkedin.com/in/ramazan-karsanba/" target="_blank" class="social-icon me-3" aria-label="LinkedIn profilimi ziyaret et"><i class="bi bi-linkedin"></i></a>
+                            <a href="https://x.com/RamazanKarsanba" target="_blank" class="social-icon me-3" aria-label="Twitter profilimi ziyaret et"><i class="bi bi-twitter"></i></a>
+                            <a href="mailto:rkarsanba0@gmail.com" target="_blank" class="social-icon" aria-label="E-posta gönder"><i class="bi bi-envelope"></i></a>
+                        </div>
+                        <div class="modal-container mt-4">
+                            <button type="button" class="btn btn-success btn-lg me-3" data-bs-toggle="modal" data-bs-target="#quoteModal" aria-label="Teklif al formunu aç">
+                                <i class="bi bi-calculator me-2" aria-hidden="true"></i>Teklif Al
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="hero-image">
+                        <div class="profile-image-wrapper">
+                            <img src="{% static 'images/ramazan.jpg' %}" alt="Profile" class="img-fluid rounded-circle shadow-lg" loading="eager" fetchpriority="high">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-down">
+            <a href="#about" aria-label="Hakkımda bölümüne git"><i class="bi bi-chevron-down"></i></a>
+        </div>
+    </section>
+
+    <main>
+    <!-- About Section -->
+    <section id="about" class="py-5" aria-labelledby="about-heading">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="about-content">
+                        <h2 id="about-heading" class="mb-4">Yazılım Geliştirici</h2>
+                        <p class="mb-3">
+                            Merhaba, ben <strong>Ramazan Karsanba</strong>.
+                        </p>
+                        <p class="mb-3">
+                            <strong>Python</strong> ve <strong>Django</strong> ekosisteminde uzmanlaşmış bir <strong>Full Stack Developer</strong>'ım. 
+                            Kurumsal ölçekte, yüksek trafikli ve gerçek zamanlı sistemler geliştirme konusunda tutkulu bir mühendislik yaklaşımı benimsiyorum.
+                        </p>
+                        <p class="mb-3">
+                            <strong>Neler Yapıyorum?</strong> Restoran, okul ve tesis yönetim sistemleri gibi kompleks projelerde; 
+                            çoklu kullanıcı rolleri, <strong>mikroservis mimarileri</strong> ve ölçeklenebilir backend altyapıları kurguladım. 
+                            Geliştirme sürecinde <strong>Clean Architecture</strong> ve <strong>SOLID</strong> prensipleri benim için vazgeçilmez standartlardır.
+                        </p>
+                        <p class="mb-3">
+                            <strong>Gelecek Vizyonu:</strong> <strong>Python</strong> tabanlı <strong>AI/ML</strong> modellerini, 
+                            klasik yazılım mimarilerine entegre ederek daha akıllı sistemler oluşturmak.
+                        </p>
+                        <p class="mb-3">
+                            <strong>Hedefim;</strong> sadece çalışan değil, sürdürülebilir, ölçeklenebilir ve geleceğe hazır çözümler üretmek.
+                        </p>
+                        
+                        <!-- Technology Stack Grid -->
+                        <div class="row mt-5 text-center g-3">
+                            <div class="col-12">
+                                <h3 class="text-primary mb-4">Technology Stack</h3>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-filetype-py tech-icon"></i>
+                                    <p class="small mt-2 mb-0">Python</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-diagram-3 tech-icon"></i>
+                                    <p class="small mt-2 mb-0">Django</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-database tech-icon"></i>
+                                    <p class="small mt-2 mb-0">PostgreSQL</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-boxes tech-icon"></i>
+                                    <p class="small mt-2 mb-0">Docker</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-robot tech-icon"></i>
+                                    <p class="small mt-2 mb-0">AI/ML</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-cloud tech-icon"></i>
+                                    <p class="small mt-2 mb-0">AWS</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-code-slash tech-icon"></i>
+                                    <p class="small mt-2 mb-0">React</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-broadcast tech-icon"></i>
+                                    <p class="small mt-2 mb-0">WebSocket</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-server tech-icon"></i>
+                                    <p class="small mt-2 mb-0">Redis</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-filetype-js tech-icon"></i>
+                                    <p class="small mt-2 mb-0">JavaScript</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-filetype-tsx tech-icon"></i>
+                                    <p class="small mt-2 mb-0">TypeScript</p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2">
+                                <div class="tech-icon-wrapper">
+                                    <i class="bi bi-plug tech-icon"></i>
+                                    <p class="small mt-2 mb-0">REST API</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5 bg-light" aria-labelledby="services-heading">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 id="services-heading" class="section-title">Hizmetlerim</h2>
+                    <p class="section-subtitle">Sunduğum hizmetler</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card h-100">
+                        <div class="service-icon" aria-hidden="true">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+                        <h3 class="mt-4 mb-3">Web Geliştirme</h3>
+                        <p>
+                            Modern ve responsive web siteleri geliştiriyorum. 
+                            Django, React ve diğer modern teknolojileri kullanıyorum.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card h-100">
+                        <div class="service-icon" aria-hidden="true">
+                            <i class="bi bi-phone"></i>
+                        </div>
+                        <h3 class="mt-4 mb-3">Mobil Uygulama</h3>
+                        <p>
+                            React Native ile cross-platform mobil uygulamalar geliştiriyorum. 
+                            iOS ve Android için tek kod tabanı.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card h-100">
+                        <div class="service-icon" aria-hidden="true">
+                            <i class="bi bi-palette"></i>
+                        </div>
+                        <h3 class="mt-4 mb-3">UI/UX Tasarım</h3>
+                        <p>
+                            Kullanıcı odaklı arayüz tasarımları yapıyorum. 
+                            Modern ve kullanıcı dostu deneyimler oluşturuyorum.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card h-100">
+                        <div class="service-icon" aria-hidden="true">
+                            <i class="bi bi-database"></i>
+                        </div>
+                        <h3 class="mt-4 mb-3">Backend Geliştirme</h3>
+                        <p>
+                            Güvenli ve ölçeklenebilir backend sistemleri tasarlıyorum. 
+                            RESTful API'ler ve veritabanı yönetimi.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card h-100">
+                        <div class="service-icon" aria-hidden="true">
+                            <i class="bi bi-cloud"></i>
+                        </div>
+                        <h3 class="mt-4 mb-3">Cloud Çözümleri</h3>
+                        <p>
+                            AWS, Azure gibi cloud platformlarında uygulama deploy ve yönetimi. 
+                            DevOps süreçleri.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card h-100">
+                        <div class="service-icon" aria-hidden="true">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h3 class="mt-4 mb-3">SEO Optimizasyonu</h3>
+                        <p>
+                            Arama motoru optimizasyonu ve performans iyileştirmeleri. 
+                            Hızlı ve SEO dostu web siteleri.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-5" aria-labelledby="portfolio-heading">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 id="portfolio-heading" class="section-title">Projelerim</h2>
+                    <p class="section-subtitle">Yaptığım bazı projeler</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="portfolio-item">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <div class="flex-grow-1">
+                                <h3>🍕 PizzaPizza - Enterprise Restoran Yönetim Sistemi</h3>
+                                <p>
+                                    Clean Architecture prensipleriyle geliştirilmiş, çoklu şube desteği olan, 
+                                    gerçek zamanlı bildirimlerle donatılmış enterprise-level pizza restoran yönetim sistemi. 
+                                    7 farklı kullanıcı rolü, WebSocket entegrasyonu,gelişmiş kupon sistemi, çoklu kanal sipariş sistemi ve 
+                                    kapsamlı dashboard özellikleri içerir.Ek olarak kiosk modülü ile müşteri kendi siparişini hızlıca verebilir.
+                                </p>
+                                <div class="portfolio-tech">
+                                    <span class="tech-badge">Django</span>
+                                    <span class="tech-badge">Django REST Framework</span>
+                                    <span class="tech-badge">WebSocket</span>
+                                    <span class="tech-badge">React</span>
+                                    <span class="tech-badge">TypeScript</span>
+                                    <span class="tech-badge">Redux</span>
+                                    <span class="tech-badge">Redis</span>
+                                    <span class="tech-badge">MySQL</span>
+                                    <span class="tech-badge">Docker</span>
+                                    <span class="tech-badge">Nginx</span>
+                                </div>
+                            </div>
+                            <div class="portfolio-links ms-3 mt-3">
+                                <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#projectModal1" aria-label="PizzaPizza projesi detaylarını görüntüle">
+                                    <i class="bi bi-eye" aria-hidden="true"></i> Detaylar
+                                </button>
+                                <a href="#" class="btn btn-sm btn-outline-light" aria-label="PizzaPizza projesi GitHub sayfası"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <div class="flex-grow-1">
+                                <h3>🏫 Minimus - Okul Yönetim Sistemi</h3>
+                                <p>
+                                    Near East College , British ve Junior okulları için geliştirilmiş kapsamlı okul yönetim sistemi. Öğrenci kayıtları, 
+                                    akademik takip, mali işlemler, nöbetçi yönetimi, banka entegrasyonu, mobil API desteği ve bir okul için gerekli olan tüm özellikleri içerir. 
+                                    9 farklı yerleşke, 50+ veritabanı modeli, Excel/PDF/Word raporlama ve çoklu dil desteği içerir.
+                                </p>
+                                <div class="portfolio-tech">
+                                    <span class="tech-badge">Django</span>
+                                    <span class="tech-badge">Django REST Framework</span>
+                                    <span class="tech-badge">MySQL</span>
+                                    <span class="tech-badge">JWT</span>
+                                    <span class="tech-badge">Pandas</span>
+                                </div>
+                            </div>
+                            <div class="portfolio-links ms-3 mt-3">
+                                <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#projectModal2" aria-label="Minimus projesi detaylarını görüntüle">
+                                    <i class="bi bi-eye" aria-hidden="true"></i> Detaylar
+                                </button>
+                                <a href="#" class="btn btn-sm btn-outline-light" aria-label="Minimus projesi GitHub sayfası"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portfolio-item">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <div class="flex-grow-1">
+                                <h3>🏋️ ZenMotion - Spor Salonu Yönetim Sistemi</h3>
+                                <p>
+                                    Django tabanlı spor salonu/tesis yönetim sistemi. Üye, personel ve eğitmen yönetimi, 
+                                    borç ve ödeme takibi, kampanya yönetimi, turnike/Hikvision entegrasyonları ve çok dilli arayüz. 
+                                    Clean Architecture prensipleriyle geliştirilmiş, audit log ve versiyonlama desteği içerir.
+                                </p>
+                                <div class="portfolio-tech">
+                                    <span class="tech-badge">Django</span>
+                                    <span class="tech-badge">MySQL</span>
+                                    <span class="tech-badge">REST API</span>
+                                    <span class="tech-badge">JWT</span>
+                                    <span class="tech-badge">SOAP</span>
+                                </div>
+                            </div>
+                            <div class="portfolio-links ms-3 mt-3">
+                                <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#projectModal3" aria-label="ZenMotion projesi detaylarını görüntüle">
+                                    <i class="bi bi-eye" aria-hidden="true"></i> Detaylar
+                                </button>
+                                <a href="#" class="btn btn-sm btn-outline-light" aria-label="ZenMotion projesi GitHub sayfası"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    
+                    <div class="portfolio-item">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <div class="flex-grow-1">
+                                <h3>🏊 Olympia - Yüzme Havuzu Yönetim Sistemi</h3>
+                                <p>
+                                    Yakın Doğu Üniversitesi Yüzme Havuzu için geliştirilmiş yönetim sistemi. 
+                                    Üyelik işlemleri, kurs katılımları, finansal yönetim, performans takibi, lisans yönetimi gibi özellikleri içerir. 
+                                    Clean Architecture, audit log, JWT authentication ve Swagger API dokümantasyonu içerir.
+                                </p>
+                                <div class="portfolio-tech">
+                                    <span class="tech-badge">Django</span>
+                                    <span class="tech-badge">Django REST Framework</span>
+                                    <span class="tech-badge">MySQL</span>
+                                    <span class="tech-badge">JWT</span>
+                                    <span class="tech-badge">Swagger</span>
+                                </div>
+                            </div>
+                            <div class="portfolio-links ms-3 mt-3">
+                                <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#projectModal4" aria-label="Olympia projesi detaylarını görüntüle">
+                                    <i class="bi bi-eye" aria-hidden="true"></i> Detaylar
+                                </button>
+                                <a href="#" class="btn btn-sm btn-outline-light" aria-label="Olympia projesi GitHub sayfası"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modals -->
+    <!-- Modal 1: PizzaPizza -->
+    <div class="modal fade" id="projectModal1" tabindex="-1" aria-hidden="true" aria-labelledby="modal1-title">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header border-secondary">
+                    <h2 class="modal-title text-white">🍕 PizzaPizza - Enterprise Restoran Yönetim Sistemi</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Modal'ı kapat"></button>
+                </div>
+                <div class="modal-body text-white">
+                    <div class="mb-4">
+                        <img src="{% static 'images/pizzapizza1.png' %}" alt="PizzaPizza Projesi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                    </div>
+                    <p class="text-warning mb-3">Bu proje kurumsal bir intranet uygulamasıdır. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
+                    <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
+                    <ul class="mb-3">
+                        <li>WebSocket ile anlık sipariş takibi ve gerçek zamanlı bildirimler</li>
+                        <li>7 farklı kullanıcı rolü (Admin, Manager, Call Center, Cook, Courier, Cashier, Customer)</li>
+                        <li>Çoklu şube desteği ve şubeler arası sipariş transferi</li>
+                        <li>Gelişmiş menü sistemi (varyant, malzeme yönetimi, fiyat stratejileri)</li>
+                        <li>Restoran bazlı ciro raporları ve dashboard</li>
+                        <li>Gelişmiş kupon sistemi</li>
+                        <li>Clean Architecture prensipleriyle geliştirilmiş</li>
+                        <li>Docker containerization ve Nginx reverse proxy</li>
+                    </ul>
+                    <h3 class="text-primary mb-2">Teknoloji Stack:</h3>
+                    <p class="small">Django, Django REST Framework, React, TypeScript, WebSocket, Redis, MySQL, Docker, Nginx</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Minimus -->
+    <div class="modal fade" id="projectModal2" tabindex="-1" aria-hidden="true" aria-labelledby="modal2-title">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header border-secondary">
+                    <h2 id="modal2-title" class="modal-title text-white">🏫 Minimus - Okul Yönetim Sistemi</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Modal'ı kapat"></button>
+                </div>
+                <div class="modal-body text-white">
+                    <div class="mb-4">
+                        <img src="{% static 'images/college.png' %}" alt="Minimus Okul Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                    </div>
+                    <p class="text-warning mb-3">Bu proje kurumsal bir eğitim platformudur. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
+                    <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
+                    <ul class="mb-3">
+                        <li>9 farklı yerleşke desteği (Near East College, British School, Junior okulları)</li>
+                        <li>Öğrenci kayıtları, akademik takip ve not yönetimi</li>
+                        <li>Mali işlemler, borç takibi ve banka entegrasyonu</li>
+                        <li>Nöbetçi yönetimi ve ders programı oluşturma</li>
+                        <li>50+ veritabanı modeli ile kapsamlı sistem</li>
+                        <li>Excel/PDF/Word raporlama sistemi</li>
+                        <li>Mobil API desteği ve JWT authentication</li>
+                        <li>Çoklu dil desteği (Türkçe/İngilizce)</li>
+                    </ul>
+                    <h3 class="text-primary mb-2">Teknoloji Stack:</h3>
+                    <p class="small">Django, Django REST Framework, MySQL, JWT, Pandas, ReportLab, OpenPyXL</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: ZenMotion -->
+    <div class="modal fade" id="projectModal3" tabindex="-1" aria-hidden="true" aria-labelledby="modal3-title">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header border-secondary">
+                    <h2 id="modal3-title" class="modal-title text-white">🏋️ ZenMotion - Spor Salonu Yönetim Sistemi</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Modal'ı kapat"></button>
+                </div>
+                <div class="modal-body text-white">
+                    <div class="mb-4">
+                        <img src="{% static 'images/gymtower.png' %}" alt="ZenMotion Spor Salonu Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                    </div>
+                    <p class="text-warning mb-3">Bu proje kurumsal bir tesis yönetim sistemidir. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
+                    <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
+                    <ul class="mb-3">
+                        <li>Üye, personel ve eğitmen yönetimi</li>
+                        <li>Borç ve ödeme takibi, kampanya yönetimi</li>
+                        <li>Turnike/Hikvision entegrasyonları ile gerçek zamanlı giriş takibi</li>
+                        <li>Eğitmen zaman çizelgesi ve yoklama takibi</li>
+                        <li>Audit log ve versiyonlama desteği</li>
+                        <li>Çok dilli arayüz (Türkçe/İngilizce)</li>
+                        <li>Clean Architecture prensipleriyle geliştirilmiş</li>
+                    </ul>
+                    <h3 class="text-primary mb-2">Teknoloji Stack:</h3>
+                    <p class="small">Django, MySQL, REST API, JWT, SOAP, django-auditlog, django-reversion</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Olympia -->
+    <div class="modal fade" id="projectModal4" tabindex="-1" aria-hidden="true" aria-labelledby="modal4-title">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header border-secondary">
+                    <h2 id="modal4-title" class="modal-title text-white">🏊 Olympia - Yüzme Havuzu Yönetim Sistemi</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Modal'ı kapat"></button>
+                </div>
+                <div class="modal-body text-white">
+                    <div class="mb-4">
+                        <img src="{% static 'images/pool.png' %}" alt="Olympia Yüzme Havuzu Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                    </div>
+                    <p class="text-warning mb-3">Bu proje kurumsal bir tesis yönetim sistemidir. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
+                    <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
+                    <ul class="mb-3">
+                        <li>Üyelik işlemleri ve kurs katılımları yönetimi</li>
+                        <li>Finansal yönetim ve ödeme takibi</li>
+                        <li>Performans takibi ve istatistiksel analizler</li>
+                        <li>Lisans yönetimi ve lisanslı sporcu takibi</li>
+                        <li>Clean Architecture prensipleriyle geliştirilmiş</li>
+                        <li>Audit log ve JWT authentication</li>
+                        <li>Swagger API dokümantasyonu</li>
+                    </ul>
+                    <h3 class="text-primary mb-2">Teknoloji Stack:</h3>
+                    <p class="small">Django, Django REST Framework, MySQL, JWT, Swagger, django-auditlog, django-reversion</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teklif Al Modal -->
+    <div class="modal fade" id="quoteModal" tabindex="-1" aria-labelledby="quoteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header border-secondary">
+                    <h2 id="quoteModalLabel" class="modal-title text-white">
+                        <i class="bi bi-calculator me-2" aria-hidden="true"></i>Proje Teklifi Al
+                    </h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Modal'ı kapat"></button>
+                </div>
+                <div class="modal-body text-white">
+                    <form id="quoteForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="quoteName" class="form-label">Adınız Soyadınız <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" id="quoteName" name="name" placeholder="Adınız Soyadınız" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quoteEmail" class="form-label">E-posta <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control bg-dark text-white border-secondary" id="quoteEmail" name="email" placeholder="ornek@email.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quotePhone" class="form-label">Telefon <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control bg-dark text-white border-secondary" id="quotePhone" name="phone" placeholder="+90 5XX XXX XX XX" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quoteCompany" class="form-label">Şirket/Organizasyon</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary" id="quoteCompany" name="company" placeholder="Şirket adı (opsiyonel)">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quoteProjectType" class="form-label">Proje Türü <span class="text-danger">*</span></label>
+                                <select class="form-select bg-dark text-white border-secondary" id="quoteProjectType" name="projectType" required>
+                                    <option value="">Seçiniz...</option>
+                                    <option value="Web Sitesi">Web Sitesi</option>
+                                    <option value="E-Ticaret Platformu">E-Ticaret Platformu</option>
+                                    <option value="Kurumsal Web Uygulaması">Kurumsal Web Uygulaması</option>
+                                    <option value="Mobil Uygulama">Mobil Uygulama</option>
+                                    <option value="API Geliştirme">API Geliştirme</option>
+                                    <option value="Backend Sistem">Backend Sistem</option>
+                                    <option value="Yönetim Paneli">Yönetim Paneli</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quoteBudget" class="form-label">Bütçe Aralığı <span class="text-danger">*</span></label>
+                                <select class="form-select bg-dark text-white border-secondary" id="quoteBudget" name="budget" required>
+                                    <option value="">Seçiniz...</option>
+                                    <option value="5.000 - 15.000 TL">5.000 - 15.000 TL</option>
+                                    <option value="15.000 - 30.000 TL">15.000 - 30.000 TL</option>
+                                    <option value="30.000 - 50.000 TL">30.000 - 50.000 TL</option>
+                                    <option value="50.000 - 100.000 TL">50.000 - 100.000 TL</option>
+                                    <option value="100.000 TL ve üzeri">100.000 TL ve üzeri</option>
+                                    <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quoteTimeline" class="form-label">Zaman Çerçevesi <span class="text-danger">*</span></label>
+                                <select class="form-select bg-dark text-white border-secondary" id="quoteTimeline" name="timeline" required>
+                                    <option value="">Seçiniz...</option>
+                                    <option value="Acil (1 ay içinde)">Acil (1 ay içinde)</option>
+                                    <option value="2-3 ay içinde">2-3 ay içinde</option>
+                                    <option value="3-6 ay içinde">3-6 ay içinde</option>
+                                    <option value="6 ay ve üzeri">6 ay ve üzeri</option>
+                                    <option value="Esnek">Esnek</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="quoteDescription" class="form-label">Proje Detayları <span class="text-danger">*</span></label>
+                                <textarea class="form-control bg-dark text-white border-secondary" id="quoteDescription" name="description" rows="5" placeholder="Projeniz hakkında detaylı bilgi verin. İhtiyaçlarınız, özellikler, hedefler vb." required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="quoteAgree" name="agree" required>
+                                    <label class="form-check-label" for="quoteAgree">
+                                        <a href="#" class="text-primary">Gizlilik Politikası</a>'nı okudum ve kabul ediyorum. <span class="text-danger">*</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-success" id="submitQuoteBtn">
+                        <i class="bi bi-whatsapp me-2" aria-hidden="true"></i>WhatsApp ile Gönder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5 bg-light" aria-labelledby="contact-heading">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 id="contact-heading" class="section-title">İletişim</h2>
+                    <p class="section-subtitle">Benimle iletişime geçin</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="contact-form">
+                        <form id="contactForm" method="post">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="contactName" class="form-label visually-hidden">Adınız</label>
+                                    <input type="text" name="name" id="contactName" class="form-control" placeholder="Adınız" required aria-label="Adınız">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="contactEmail" class="form-label visually-hidden">E-posta</label>
+                                    <input type="email" name="email" id="contactEmail" class="form-control" placeholder="E-posta" required aria-label="E-posta adresiniz">
+                                </div>
+                                <div class="col-12">
+                                    <label for="contactSubject" class="form-label visually-hidden">Konu</label>
+                                    <input type="text" name="subject" id="contactSubject" class="form-control" placeholder="Konu" required aria-label="Mesaj konusu">
+                                </div>
+                                <div class="col-12">
+                                    <label for="contactMessage" class="form-label visually-hidden">Mesajınız</label>
+                                    <textarea name="message" id="contactMessage" class="form-control" rows="5" placeholder="Mesajınız" required aria-label="Mesajınız"></textarea>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg" aria-label="WhatsApp ile mesaj gönder">
+                                        <i class="bi bi-whatsapp me-2" aria-hidden="true"></i>WhatsApp ile Gönder
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-4 text-center mb-4">
+                    <div class="contact-info">
+                        <i class="bi bi-geo-alt-fill contact-icon" aria-hidden="true"></i>
+                        <h3>Adres</h3>
+                        <p>Türkiye</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="contact-info">
+                        <i class="bi bi-envelope-fill contact-icon" aria-hidden="true"></i>
+                        <h3>E-posta</h3>
+                        <p><a href="mailto:rkarsanba0@gmail.com" aria-label="E-posta gönder">rkarsanba0@gmail.com</a></p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center mb-4">
+                    <div class="contact-info">
+                        <i class="bi bi-phone-fill contact-icon" aria-hidden="true"></i>
+                        <h3>Telefon</h3>
+                        <p><a href="tel:+905338452360" aria-label="Telefon ara">+90 533 845 23 60</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2026 . Tüm hakları saklıdır.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-links">
+                        <a href="https://github.com/colonel51" target="_blank" class="social-icon me-3" aria-label="GitHub profilimi ziyaret et"><i class="bi bi-github" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/ramazan-karsanba/" target="_blank" class="social-icon me-3" aria-label="LinkedIn profilimi ziyaret et"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                        <a href="https://x.com/RamazanKarsanba" target="_blank" class="social-icon me-3" aria-label="Twitter profilimi ziyaret et"><i class="bi bi-twitter" aria-hidden="true"></i></a>
+                        <a href="mailto:rkarsanba0@gmail.com" target="_blank" class="social-icon" aria-label="E-posta gönder"><i class="bi bi-envelope" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}" defer></script>
+</body>
+</html>
