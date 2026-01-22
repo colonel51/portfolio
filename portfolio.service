@@ -7,15 +7,15 @@ User=root
 Group=www-data
 WorkingDirectory=/opt/portfolio
 Environment="PATH=/opt/portfolio/venv/bin:/usr/local/bin:/usr/bin:/bin"
-ExecStartPre=/bin/mkdir -p /opt/portfolio/logs
-ExecStartPre=/bin/chmod 755 /opt/portfolio/logs
 ExecStart=/opt/portfolio/venv/bin/gunicorn \
     --workers 3 \
     --bind unix:/opt/portfolio/gunicorn.sock \
     --timeout 120 \
-    --access-logfile /opt/portfolio/logs/gunicorn-access.log \
-    --error-logfile /opt/portfolio/logs/gunicorn-error.log \
+    --access-logfile - \
+    --error-logfile - \
     portfolio.wsgi:application
+StandardOutput=journal
+StandardError=journal
 Restart=always
 RestartSec=3
 
