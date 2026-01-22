@@ -92,21 +92,17 @@
     <!-- Theme Initialization Script (Must run before page render) -->
     <script>
         (function() {
-            // Get saved theme or detect system preference
+            // Get saved theme - always default to dark if not saved
             function getInitialTheme() {
                 try {
                     const savedTheme = localStorage.getItem('theme');
                     if (savedTheme) {
                         return savedTheme;
                     }
-                    // Check system preference
-                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                        return 'light';
-                    }
                 } catch(e) {
                     console.error('Theme detection error:', e);
                 }
-                return 'dark'; // Default to dark
+                return 'dark'; // Always default to dark
             }
             
             // Apply theme immediately to prevent FOUC

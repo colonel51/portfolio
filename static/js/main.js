@@ -427,17 +427,13 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
     const themeIcon = document.getElementById('themeIcon');
     const html = document.documentElement;
     
-    // Get saved theme or detect system preference
+    // Get saved theme - always default to dark if not saved
     function getInitialTheme() {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             return savedTheme;
         }
-        // Check system preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            return 'light';
-        }
-        return 'dark'; // Default to dark
+        return 'dark'; // Always default to dark (ignore system preference)
     }
     
     // Apply theme
@@ -484,16 +480,7 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
         });
     }
     
-    // Listen for system theme changes
-    if (window.matchMedia) {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-        mediaQuery.addEventListener('change', function(e) {
-            // Only auto-switch if user hasn't manually set a preference
-            if (!localStorage.getItem('theme')) {
-                setTheme(e.matches ? 'light' : 'dark');
-            }
-        });
-    }
+    // System theme changes are ignored - user must manually toggle
 })();
 
 // Scroll to Top Button
@@ -535,57 +522,4 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
     toggleScrollButton();
 })();
 
-// Parallax Effect for Hero Section
-(function() {
-    const heroSection = document.querySelector('.hero-section');
-    const heroContent = document.querySelector('.hero-content');
-    const heroImage = document.querySelector('.hero-image');
-    
-    if (!heroSection || !heroContent) return;
-    
-    // Only enable parallax on desktop (performance)
-    if (window.innerWidth < 768) return;
-    
-    let ticking = false;
-    
-    function updateParallax() {
-        const scrolled = window.pageYOffset;
-        const heroHeight = heroSection.offsetHeight;
-        
-        // Only apply parallax when hero is in view
-        if (scrolled < heroHeight) {
-            const parallaxSpeed = 0.5;
-            const contentOffset = scrolled * parallaxSpeed;
-            const imageOffset = scrolled * 0.3;
-            
-            if (heroContent) {
-                heroContent.style.transform = `translateY(${contentOffset}px) translateZ(0)`;
-            }
-            
-            if (heroImage) {
-                heroImage.style.transform = `translateY(${imageOffset}px) translateZ(0)`;
-            }
-        }
-        
-        ticking = false;
-    }
-    
-    window.addEventListener('scroll', function() {
-        if (!ticking) {
-            window.requestAnimationFrame(updateParallax);
-            ticking = true;
-        }
-    });
-    
-    // Reset on resize
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-            if (window.innerWidth < 768) {
-                if (heroContent) heroContent.style.transform = '';
-                if (heroImage) heroImage.style.transform = '';
-            }
-        }, 250);
-    });
-})();
+// Parallax effect removed for better performance
