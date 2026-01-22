@@ -457,9 +457,23 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
         }
     }
     
-    // Initialize theme on page load
-    const initialTheme = getInitialTheme();
-    setTheme(initialTheme);
+    // Initialize theme on page load (only if not already set by inline script)
+    if (!html.getAttribute('data-theme')) {
+        const initialTheme = getInitialTheme();
+        setTheme(initialTheme);
+    } else {
+        // Theme already set by inline script, just update icon
+        const currentTheme = html.getAttribute('data-theme');
+        if (themeIcon) {
+            if (currentTheme === 'light') {
+                themeIcon.classList.remove('bi-moon-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            } else {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-fill');
+            }
+        }
+    }
     
     // Toggle theme on button click
     if (themeToggle) {

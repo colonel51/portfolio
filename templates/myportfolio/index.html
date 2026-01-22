@@ -34,6 +34,28 @@
             src: local('Arial'), local('Helvetica'), local('sans-serif');
         }
         
+        /* CSS Variables - Must be defined before use */
+        :root {
+            --primary-color: #0d6efd;
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-card: rgba(26, 26, 26, 0.7);
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        
         body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:var(--text-primary);background:var(--bg-primary);margin:0;padding:0;line-height:1.6;overflow-x:hidden;transition:background-color .3s ease,color .3s ease}
         .navbar{background:rgba(33,37,41,.95)!important;backdrop-filter:blur(10px);position:fixed;top:0;width:100%;z-index:1000;padding:1rem 0;transition:transform .3s ease-in-out,background-color .3s ease}
         [data-theme="light"] .navbar{background:rgba(248,249,250,.95)!important}
@@ -67,6 +89,32 @@
         img{max-width:100%;height:auto}
     </style>
     
+    <!-- Theme Initialization Script (Must run before page render) -->
+    <script>
+        (function() {
+            // Get saved theme or detect system preference
+            function getInitialTheme() {
+                try {
+                    const savedTheme = localStorage.getItem('theme');
+                    if (savedTheme) {
+                        return savedTheme;
+                    }
+                    // Check system preference
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                        return 'light';
+                    }
+                } catch(e) {
+                    console.error('Theme detection error:', e);
+                }
+                return 'dark'; // Default to dark
+            }
+            
+            // Apply theme immediately to prevent FOUC
+            const initialTheme = getInitialTheme();
+            document.documentElement.setAttribute('data-theme', initialTheme);
+        })();
+    </script>
+    
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Ramazan Karsanba | Senior Python Developer">
     <meta property="og:description" content="Ölçeklenebilir backend mimarileri ve yapay zeka çözümleri. Python & Django Full Stack Developer.">
@@ -98,8 +146,8 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
     
     <!-- Custom CSS - Async Load -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{% static 'css/style.css' %}"></noscript>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2.0" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{% static 'css/style.css' %}?v=2.0"></noscript>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -869,6 +917,6 @@
     </script>
     
     <!-- Custom JS - Defer Load -->
-    <script src="{% static 'js/main.js' %}" defer></script>
+    <script src="{% static 'js/main.js' %}?v=2.0" defer></script>
 </body>
 </html>
