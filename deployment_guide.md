@@ -2,19 +2,23 @@
 
 ## 1. Droplet'e Proje Yükleme
 
-### Projeyi Droplet'e Kopyalama
-```bash
-# Lokal makineden (PowerShell veya Git Bash)
-scp -r . root@161.35.207.182:/opt/Portfolio/
-```
-
-Veya Git kullanarak:
+### GitHub'dan Clone (Önerilen)
 ```bash
 # Droplet'te
 cd /opt
-git clone YOUR_REPO_URL Portfolio
+git clone https://github.com/colonel51/portfolio.git Portfolio
 cd Portfolio
 ```
+
+### İlk Deployment (Otomatik Script)
+```bash
+# Droplet'te deploy.sh script'ini çalıştırın
+cd /opt/Portfolio
+bash deploy.sh
+```
+
+### Manuel Deployment
+Eğer script kullanmak istemiyorsanız, aşağıdaki adımları takip edin.
 
 ## 2. Python Virtual Environment Kurulumu
 
@@ -114,4 +118,39 @@ sudo ufw allow 'Nginx Full'
 
 ```bash
 sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+```
+
+## 10. Projeyi Güncelleme (GitHub'dan)
+
+### Hızlı Güncelleme (Otomatik Script)
+```bash
+# Droplet'te
+cd /opt/Portfolio
+bash update.sh
+```
+
+### Manuel Güncelleme
+```bash
+cd /opt/Portfolio
+git pull origin main
+source venv/bin/activate
+pip install -r requirements.txt --upgrade
+python manage.py collectstatic --noinput
+python manage.py migrate
+systemctl restart portfolio
+```
+
+## 11. GitHub'a Değişiklikleri Push Etme
+
+### Lokal Makineden
+```bash
+git add .
+git commit -m "Değişiklik açıklaması"
+git push origin main
+```
+
+### Droplet'te Güncelleme
+```bash
+cd /opt/Portfolio
+bash update.sh
 ```

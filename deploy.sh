@@ -5,34 +5,50 @@
 
 echo "=== Portfolio Deployment Başlıyor ==="
 
-# 1. Dizin oluştur
-echo "1. /opt/Portfolio dizini oluşturuluyor..."
-mkdir -p /opt/Portfolio
+# 1. Git kontrolü
+echo "1. Git kontrolü..."
+if ! command -v git &> /dev/null; then
+    echo "Git yüklü değil, yükleniyor..."
+    apt-get update
+    apt-get install -y git
+fi
 
-# 2. Python ve pip kontrolü
-echo "2. Python kontrolü..."
+# 2. Projeyi GitHub'dan clone veya pull et
+echo "2. GitHub'dan proje güncelleniyor..."
+if [ -d "/opt/Portfolio/.git" ]; then
+    echo "   Mevcut repo bulundu, pull yapılıyor..."
+    cd /opt/Portfolio
+    git pull origin main
+else
+    echo "   Repo bulunamadı, clone yapılıyor..."
+    if [ -d "/opt/Portfolio" ]; then
+        echo "   /opt/Portfolio dizini mevcut, yedekleniyor..."
+        mv /opt/Portfolio /opt/Portfolio.backup.$(date +%Y%m%d_%H%M%S)
+    fi
+    git clone https://github.com/colonel51/portfolio.git /opt/Portfolio
+fi
+
+# 3. Python ve pip kontrolü
+echo "3. Python kontrolü..."
 python3 --version
 pip3 --version
 
-# 3. Virtual environment oluştur
-echo "3. Virtual environment oluşturuluyor..."
+# 4. Virtual environment oluştur veya kontrol et
+echo "4. Virtual environment kontrol ediliyor..."
 cd /opt/Portfolio
-python3 -m venv venv
+if [ ! -d "venv" ]; then
+    echo "   Virtual environment oluşturuluyor..."
+    python3 -m venv venv
+fi
 source venv/bin/activate
 
-# 4. Gerekli paketleri yükle
-echo "4. Paketler yükleniyor..."
+# 5. Gerekli paketleri yükle
+echo "5. Paketler yükleniyor..."
 pip install --upgrade pip
-pip install django==3.2.25 gunicorn
-
-# 5. Proje dosyalarının buraya kopyalanması gerekiyor
-echo "5. Proje dosyalarını /opt/Portfolio/ altına kopyalayın!"
-echo "   Lokal makineden: scp -r . root@161.35.207.182:/opt/Portfolio/"
-read -p "Proje dosyaları kopyalandı mı? (y/n): " files_copied
-
-if [ "$files_copied" != "y" ]; then
-    echo "Lütfen önce proje dosyalarını kopyalayın!"
-    exit 1
+if [ -f "requirements.txt" ]; then
+    pip install -r requirements.txt
+else
+    pip install django==3.2.25 gunicorn
 fi
 
 # 6. Settings.py kontrolü
@@ -48,20 +64,39 @@ python manage.py collectstatic --noinput
 echo "8. Database migration yapılıyor..."
 python manage.py migrate
 
-# 9. Gunicorn service dosyasını kopyala
-echo "9. Gunicorn service dosyası oluşturuluyor..."
+# 9. Log dizini oluştur
+echo "9. Log dizini oluşturuluyor..."
+mkdir -p /opt/Portfolio/logs
+chmod 755 /opt/Portfolio/logs
+
+# 10. Gunicorn kontrolü
+echo "10. Gunicorn kontrol ediliyor..."
+if [ ! -f "/opt/Portfolio/venv/bin/gunicorn" ]; then
+    echo "   Gunicorn bulunamadı, yeniden yükleniyor..."
+    pip install gunicorn
+fi
+echo "   Gunicorn yolu: $(which gunicorn)"
+/opt/Portfolio/venv/bin/gunicorn --version
+
+# 11. Gunicorn service dosyasını kopyala
+echo "11. Gunicorn service dosyası oluşturuluyor..."
 cp portfolio.service /etc/systemd/system/portfolio.service
 systemctl daemon-reload
 systemctl enable portfolio
-systemctl start portfolio
 
-# 10. Nginx yapılandırması
-echo "10. Nginx yapılandırması..."
+# 12. Service'i başlat ve kontrol et
+echo "12. Gunicorn service başlatılıyor..."
+systemctl start portfolio
+sleep 2
+systemctl status portfolio --no-pager -l
+
+# 13. Nginx yapılandırması
+echo "13. Nginx yapılandırması..."
 cp portfolio_nginx.conf /etc/nginx/sites-available/portfolio
 ln -sf /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/
 
-# 11. Nginx test ve restart
-echo "11. Nginx test ediliyor..."
+# 14. Nginx test ve restart
+echo "14. Nginx test ediliyor..."
 nginx -t
 if [ $? -eq 0 ]; then
     systemctl restart nginx
@@ -71,8 +106,8 @@ else
     exit 1
 fi
 
-# 12. Firewall (gerekirse)
-echo "12. Firewall kontrolü..."
+# 15. Firewall (gerekirse)
+echo "15. Firewall kontrolü..."
 ufw allow 8080/tcp
 
 echo ""
