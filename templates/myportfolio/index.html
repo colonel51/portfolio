@@ -7,10 +7,21 @@
     <meta name="description" content="Ramazan Karsanba - Python & Django Full Stack Developer. Ölçeklenebilir, güvenli ve yüksek performanslı web sistemleri mimarlığı yapıyorum.">
     <title>Ramazan Karsanba | Senior Python Developer</title>
     
-    <!-- Preconnect for performance -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="{% static 'images/python.webp' %}">
+    <link rel="shortcut icon" type="image/webp" href="{% static 'images/python.webp' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/python.webp' %}">
+    
+    <!-- Resource Hints for Performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Preload Critical Font -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
     
     <!-- Critical CSS Inline (prevents FOUC) -->
     <style>
@@ -23,11 +34,12 @@
             src: local('Arial'), local('Helvetica'), local('sans-serif');
         }
         
-        body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#fff;background:#000;margin:0;padding:0;line-height:1.6;overflow-x:hidden}
-        .navbar{background:rgba(33,37,41,.95)!important;backdrop-filter:blur(10px);position:fixed;top:0;width:100%;z-index:1000;padding:1rem 0;transition:transform .3s ease-in-out}
+        body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:var(--text-primary);background:var(--bg-primary);margin:0;padding:0;line-height:1.6;overflow-x:hidden;transition:background-color .3s ease,color .3s ease}
+        .navbar{background:rgba(33,37,41,.95)!important;backdrop-filter:blur(10px);position:fixed;top:0;width:100%;z-index:1000;padding:1rem 0;transition:transform .3s ease-in-out,background-color .3s ease}
+        [data-theme="light"] .navbar{background:rgba(248,249,250,.95)!important}
         .hero-section{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
-        section{background:#000;padding:80px 0}
-        section.bg-light{background:#0a0a0a!important}
+        section{background:var(--bg-primary);padding:80px 0;transition:background-color .3s ease}
+        section.bg-light{background:var(--bg-secondary)!important}
         .loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s ease-out,visibility .8s ease-out}
         .loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
         .matrix-container{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
@@ -49,8 +61,8 @@
         .container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}
         .row{display:flex;flex-wrap:wrap;margin:0 -15px}
         [class*="col-"]{padding:0 15px}
-        h1,h2,h3,h4,h5,h6{color:#fff;font-weight:600;margin:0;font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
-        p{color:#ccc;margin:0;font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+        h1,h2,h3,h4,h5,h6{color:var(--text-primary);font-weight:600;margin:0;font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+        p{color:var(--text-secondary);margin:0;font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
         a{text-decoration:none;color:inherit}
         img{max-width:100%;height:auto}
     </style>
@@ -69,17 +81,25 @@
     <meta name="twitter:description" content="Ölçeklenebilir backend mimarileri ve yapay zeka çözümleri.">
     <meta name="twitter:image" content="{% static 'images/ramazan.jpg' %}">
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!-- Google Fonts - Preload for faster loading -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Bootstrap CSS - Async Load -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"></noscript>
+    
+    <!-- Bootstrap Icons - Async Load -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"></noscript>
+    
+    <!-- SweetAlert2 CSS - Lazy Load (only needed for modals) -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"></noscript>
+    
+    <!-- Google Fonts - Async Load -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- Custom CSS - Async Load -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{% static 'css/style.css' %}"></noscript>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -116,7 +136,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
                         <a class="nav-link" href="#home">Ana Sayfa</a>
                     </li>
@@ -131,6 +151,11 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">İletişim</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <button class="btn btn-link nav-link theme-toggle" id="themeToggle" aria-label="Tema değiştir" title="Tema değiştir">
+                            <i class="bi bi-moon-fill theme-icon" id="themeIcon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -177,7 +202,7 @@
                 <div class="col-lg-6 text-center">
                     <div class="hero-image">
                         <div class="profile-image-wrapper">
-                            <img src="{% static 'images/ramazan.jpg' %}" alt="Profile" class="img-fluid rounded-circle shadow-lg" loading="eager" fetchpriority="high">
+                            <img src="{% static 'images/ramazan.jpg' %}" alt="Profile" class="img-fluid rounded-circle shadow-lg" loading="eager" fetchpriority="high" width="400" height="400" decoding="async">
                         </div>
                     </div>
                 </div>
@@ -523,7 +548,7 @@
                 </div>
                 <div class="modal-body text-white">
                     <div class="mb-4">
-                        <img src="{% static 'images/pizzapizza1.png' %}" alt="PizzaPizza Projesi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                        <img src="{% static 'images/pizzapizza1.png' %}" alt="PizzaPizza Projesi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy" decoding="async" width="800" height="450">
                     </div>
                     <p class="text-warning mb-3">Bu proje kurumsal bir intranet uygulamasıdır. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
                     <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
@@ -554,7 +579,7 @@
                 </div>
                 <div class="modal-body text-white">
                     <div class="mb-4">
-                        <img src="{% static 'images/college.png' %}" alt="Minimus Okul Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                        <img src="{% static 'images/college.png' %}" alt="Minimus Okul Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy" decoding="async" width="800" height="450">
                     </div>
                     <p class="text-warning mb-3">Bu proje kurumsal bir eğitim platformudur. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
                     <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
@@ -585,7 +610,7 @@
                 </div>
                 <div class="modal-body text-white">
                     <div class="mb-4">
-                        <img src="{% static 'images/gymtower.png' %}" alt="ZenMotion Spor Salonu Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                        <img src="{% static 'images/gymtower.png' %}" alt="ZenMotion Spor Salonu Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy" decoding="async" width="800" height="450">
                     </div>
                     <p class="text-warning mb-3">Bu proje kurumsal bir tesis yönetim sistemidir. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
                     <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
@@ -615,7 +640,7 @@
                 </div>
                 <div class="modal-body text-white">
                     <div class="mb-4">
-                        <img src="{% static 'images/pool.png' %}" alt="Olympia Yüzme Havuzu Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy">
+                        <img src="{% static 'images/pool.png' %}" alt="Olympia Yüzme Havuzu Yönetim Sistemi ekran görüntüsü" class="img-fluid rounded shadow-lg" loading="lazy" decoding="async" width="800" height="450">
                     </div>
                     <p class="text-warning mb-3">Bu proje kurumsal bir tesis yönetim sistemidir. Canlı link güvenlik nedeniyle paylaşılamamaktadır.</p>
                     <h3 class="text-primary mb-3">Öne Çıkan Özellikler:</h3>
@@ -813,11 +838,37 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Yukarı çık" title="Yukarı çık">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS - Defer Load -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-    <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <!-- Custom JS -->
+    
+    <!-- SweetAlert2 JS - Lazy Load (only when needed) -->
+    <script>
+        // Lazy load SweetAlert2 only when modals are opened
+        let sweetAlertLoaded = false;
+        function loadSweetAlert() {
+            if (!sweetAlertLoaded) {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+                script.defer = true;
+                document.body.appendChild(script);
+                sweetAlertLoaded = true;
+            }
+        }
+        // Load on form interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('#contactForm, #quoteForm');
+            forms.forEach(form => {
+                form.addEventListener('submit', loadSweetAlert, { once: true });
+            });
+        });
+    </script>
+    
+    <!-- Custom JS - Defer Load -->
     <script src="{% static 'js/main.js' %}" defer></script>
 </body>
 </html>
