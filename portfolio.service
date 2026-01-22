@@ -1,0 +1,17 @@
+[Unit]
+Description=Portfolio Gunicorn daemon
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/opt/Portfolio
+Environment="PATH=/opt/Portfolio/venv/bin"
+ExecStart=/opt/Portfolio/venv/bin/gunicorn \
+    --workers 3 \
+    --bind unix:/opt/Portfolio/gunicorn.sock \
+    --timeout 120 \
+    portfolio.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
