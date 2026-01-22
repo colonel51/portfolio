@@ -5,7 +5,7 @@
 
 echo "=== Portfolio Güncelleme Başlıyor ==="
 
-cd /opt/Portfolio
+cd /opt/portfolio
 
 # 1. Git pull
 echo "1. GitHub'dan güncellemeler çekiliyor..."

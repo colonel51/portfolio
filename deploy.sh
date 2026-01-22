@@ -15,17 +15,17 @@ fi
 
 # 2. Projeyi GitHub'dan clone veya pull et
 echo "2. GitHub'dan proje güncelleniyor..."
-if [ -d "/opt/Portfolio/.git" ]; then
+if [ -d "/opt/portfolio/.git" ]; then
     echo "   Mevcut repo bulundu, pull yapılıyor..."
-    cd /opt/Portfolio
+    cd /opt/portfolio
     git pull origin main
 else
     echo "   Repo bulunamadı, clone yapılıyor..."
-    if [ -d "/opt/Portfolio" ]; then
-        echo "   /opt/Portfolio dizini mevcut, yedekleniyor..."
-        mv /opt/Portfolio /opt/Portfolio.backup.$(date +%Y%m%d_%H%M%S)
+    if [ -d "/opt/portfolio" ]; then
+        echo "   /opt/portfolio dizini mevcut, yedekleniyor..."
+        mv /opt/portfolio /opt/portfolio.backup.$(date +%Y%m%d_%H%M%S)
     fi
-    git clone https://github.com/colonel51/portfolio.git /opt/Portfolio
+    git clone https://github.com/colonel51/portfolio.git /opt/portfolio
 fi
 
 # 3. Python ve pip kontrolü
@@ -35,7 +35,7 @@ pip3 --version
 
 # 4. Virtual environment oluştur veya kontrol et
 echo "4. Virtual environment kontrol ediliyor..."
-cd /opt/Portfolio
+cd /opt/portfolio
 if [ ! -d "venv" ]; then
     echo "   Virtual environment oluşturuluyor..."
     python3 -m venv venv
@@ -53,7 +53,7 @@ fi
 
 # 6. Settings.py kontrolü
 echo "6. Settings.py kontrol ediliyor..."
-cd /opt/Portfolio
+cd /opt/portfolio
 source venv/bin/activate
 
 # 7. Static files topla
@@ -66,17 +66,17 @@ python manage.py migrate
 
 # 9. Log dizini oluştur
 echo "9. Log dizini oluşturuluyor..."
-mkdir -p /opt/Portfolio/logs
-chmod 755 /opt/Portfolio/logs
+mkdir -p /opt/portfolio/logs
+chmod 755 /opt/portfolio/logs
 
 # 10. Gunicorn kontrolü
 echo "10. Gunicorn kontrol ediliyor..."
-if [ ! -f "/opt/Portfolio/venv/bin/gunicorn" ]; then
+if [ ! -f "/opt/portfolio/venv/bin/gunicorn" ]; then
     echo "   Gunicorn bulunamadı, yeniden yükleniyor..."
     pip install gunicorn
 fi
 echo "   Gunicorn yolu: $(which gunicorn)"
-/opt/Portfolio/venv/bin/gunicorn --version
+/opt/portfolio/venv/bin/gunicorn --version
 
 # 11. Gunicorn service dosyasını kopyala
 echo "11. Gunicorn service dosyası oluşturuluyor..."
