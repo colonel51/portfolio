@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-#&trsb@4758sxp-&mf5t!xuqp)%=6ewo3ke_t(v7bxnf1m9^3w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['161.35.207.182', 'localhost', '127.0.0.1']
-# Domain alınca buraya ekleyin: 'yourdomain.com', 'www.yourdomain.com'
+ALLOWED_HOSTS = ['161.35.207.182', 'localhost', '127.0.0.1', 'ramazankarsanba.com', 'www.ramazankarsanba.com']
 
 
 # Application definition
