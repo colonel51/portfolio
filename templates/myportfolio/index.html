@@ -58,8 +58,11 @@
         
         body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:var(--text-primary);background:var(--bg-primary);margin:0;padding:0;line-height:1.6;overflow-x:hidden;transition:background-color .3s ease,color .3s ease}
         .navbar{background:rgba(33,37,41,.95)!important;backdrop-filter:blur(10px);position:fixed;top:0;width:100%;z-index:1000;padding:1rem 0;transition:transform .3s ease-in-out,background-color .3s ease}
-        [data-theme="light"] .navbar{background:rgba(248,249,250,.95)!important}
+        [data-theme="light"] .navbar,[data-theme="light"] .navbar.navbar-dark,[data-theme="light"] .navbar.bg-dark{background:rgba(248,249,250,.95)!important;border-bottom:1px solid rgba(0,0,0,.1)}
         .hero-section{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+        [data-theme="light"] .hero-section{background:linear-gradient(135deg,#e3f2fd 0%,#f3e5f5 100%);color:var(--text-primary)}
+        [data-theme="light"] .hero-section p,[data-theme="light"] .hero-content p{color:var(--text-primary)!important}
+        [data-theme="light"] .hero-content .lead{color:var(--text-secondary)!important}
         section{background:var(--bg-primary);padding:80px 0;transition:background-color .3s ease}
         section.bg-light{background:var(--bg-secondary)!important}
         .loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s ease-out,visibility .8s ease-out}
