@@ -22,6 +22,8 @@ from myportfolio import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('robots.txt', views.robots_txt, name='robots_txt'),
+    path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
 ]
 
 # Static ve media dosyaları için (development)
