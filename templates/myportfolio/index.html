@@ -14,10 +14,12 @@
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/webp" href="{% static 'images/python.webp' %}">
-    <link rel="shortcut icon" type="image/webp" href="{% static 'images/python.webp' %}">
-    <link rel="apple-touch-icon" href="{% static 'images/python.webp' %}">
+    <!-- Favicon - Multiple sizes for better compatibility -->
+    <link rel="icon" type="image/webp" href="{{ favicon_url }}">
+    <link rel="shortcut icon" type="image/webp" href="{{ favicon_url }}">
+    <link rel="apple-touch-icon" href="{{ favicon_url }}">
+    <link rel="icon" type="image/webp" sizes="32x32" href="{{ favicon_url }}">
+    <link rel="icon" type="image/webp" sizes="16x16" href="{{ favicon_url }}">
     
     <!-- Resource Hints for Performance -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -123,14 +125,22 @@
     <meta property="og:description" content="Ölçeklenebilir backend mimarileri ve yapay zeka çözümleri. Python & Django Full Stack Developer.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ramazankarsanba.com">
-    <meta property="og:image" content="{% static 'images/ramazan.jpg' %}">
+    <meta property="og:image" content="{{ og_image_url }}">
+    <meta property="og:image:secure_url" content="{{ og_image_url }}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Ramazan Karsanba - Senior Python Developer">
     <meta property="og:site_name" content="Ramazan Karsanba Portfolio">
+    <meta property="og:locale" content="tr_TR">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Ramazan Karsanba | Senior Python Developer">
-    <meta name="twitter:description" content="Ölçeklenebilir backend mimarileri ve yapay zeka çözümleri.">
-    <meta name="twitter:image" content="{% static 'images/ramazan.jpg' %}">
+    <meta name="twitter:description" content="Ölçeklenebilir backend mimarileri ve yapay zeka çözümleri. Python & Django Full Stack Developer.">
+    <meta name="twitter:image" content="{{ twitter_image_url }}">
+    <meta name="twitter:image:alt" content="Ramazan Karsanba - Senior Python Developer">
+    <meta name="twitter:site" content="@RamazanKarsanba">
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">

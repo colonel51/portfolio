@@ -5,8 +5,12 @@ from django.templatetags.static import static
 
 def home(request):
     """Ana sayfa - Tek sayfalık portfolio"""
+    base_url = "https://ramazankarsanba.com"
     context = {
-        'profile_image_url': f"https://ramazankarsanba.com{static('images/ramazan.jpg')}"
+        'profile_image_url': f"{base_url}{static('images/ramazan.jpg')}",
+        'favicon_url': f"{base_url}{static('images/python.webp')}",
+        'og_image_url': f"{base_url}{static('images/ramazan.jpg')}",
+        'twitter_image_url': f"{base_url}{static('images/ramazan.jpg')}",
     }
     return render(request, 'myportfolio/index.html', context)
 
